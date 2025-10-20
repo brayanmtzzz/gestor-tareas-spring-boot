@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top" th:fragment="navbar(activePage)">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-tasks"></i> Gestor de Tareas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'dashboard'} ? 'active'" href="/">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'tasks'} ? 'active'" href="/tasks">
+                            <i class="fas fa-list-check"></i> Tareas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'categories'} ? 'active'" href="/categories">
+                            <i class="fas fa-folder"></i> Categorías
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'motivation'} ? 'active'" href="/motivation">
+                            <i class="fas fa-lightbulb"></i> Motivación
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:classappend="${activePage == 'stats'} ? 'active'" href="/stats">
+                            <i class="fas fa-chart-bar"></i> Estadísticas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

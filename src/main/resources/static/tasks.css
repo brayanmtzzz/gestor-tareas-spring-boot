@@ -1,4 +1,8 @@
-/* Estilos específicos para tareas */
+.container-main {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
 .form-card {
     padding: 2rem;
     margin-bottom: 2rem;
