@@ -1,0 +1,143 @@
+/* Estilos específicos para el dashboard */
+.container-main {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.welcome-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+}
+
+.welcome-card h1 {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.welcome-card p {
+    opacity: 0.9;
+    font-size: 1.1rem;
+}
+
+.stat-card {
+    padding: 1.5rem;
+    text-align: center;
+    background: white;
+}
+
+.stat-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.recent-tasks-card {
+    background: white;
+    padding: 1.5rem;
+}
+
+.task-item {
+    padding: 1rem;
+    border-left: 4px solid var(--primary-color);
+    background: #f8f9fa;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.task-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.task-item.completed {
+    border-left-color: var(--success-color);
+    opacity: 0.7;
+}
+
+.task-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.task-date {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.badge-priority {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.action-btn {
+    padding: 1.5rem;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #1f2937;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: block;
+}
+
+.action-btn:hover {
+    transform: scale(1.05);
+    color: var(--primary-color);
+}
+
+.action-btn i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.quote-card {
+    background: white;
+    padding: 2rem;
+    border-left: 5px solid var(--primary-color);
+}
+
+.quote-text {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #374151;
+    margin-bottom: 1rem;
+}
+
+.quote-author {
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+    }
+}

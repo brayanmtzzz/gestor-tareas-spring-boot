@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gestor de Tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" th:href="@{/dashboard.css}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-tasks"></i> Gestor de Tareas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/tasks">
+                            <i class="fas fa-list-check"></i> Tareas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/categories">
+                            <i class="fas fa-folder"></i> Categorías
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/motivation">
+                            <i class="fas fa-lightbulb"></i> Motivación
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stats">
+                            <i class="fas fa-chart-bar"></i> Estadísticas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container container-main">
+        <!-- Welcome Card -->
+        <div class="card welcome-card mb-4">
+            <h1><i class="fas fa-hand-wave"></i> ¡Bienvenido de vuelta!</h1>
+            <p>Aquí está un resumen de tu productividad de hoy</p>
+        </div>
+
+        <!-- Quote of the Day -->
+        <div class="card quote-card mb-4" th:if="${quote}">
+            <h5 class="mb-3">
+                <i class="fas fa-quote-left"></i> Frase del Día
+            </h5>
+            <p class="quote-text" th:text="'&quot;' + ${quote.quote} + '&quot;'"></p>
+            <p class="quote-author">- <span th:text="${quote.author}"></span></p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card stat-card">
+                    <div class="stat-icon" style="color: var(--primary-color);">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h2 class="stat-number" th:text="${totalTasks}">0</h2>
+                    <p class="stat-label">Total de Tareas</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card stat-card">
+                    <div class="stat-icon" style="color: var(--success-color);">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 class="stat-number" th:text="${completedTasks}">0</h2>
+                    <p class="stat-label">Completadas</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card stat-card">
+                    <div class="stat-icon" style="color: var(--warning-color);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2 class="stat-number" th:text="${pendingTasks}">0</h2>
+                    <p class="stat-label">Pendientes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Tasks -->
+        <div class="card recent-tasks-card mb-4">
+            <h3 class="mb-3">
+                <i class="fas fa-history"></i> Tareas Recientes
+            </h3>
+            <div th:if="${#lists.isEmpty(recentTasks)}" class="text-center text-muted py-4">
+                <i class="fas fa-inbox fa-3x mb-3"></i>
+                <p>No hay tareas recientes. ¡Comienza creando una nueva!</p>
+            </div>
+            <div th:each="task : ${recentTasks}" 
+                 class="task-item"
+                 th:classappend="${task.completed} ? 'completed' : ''">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="task-title" th:text="${task.title}"></div>
+                        <div class="task-date">
+                            <i class="fas fa-calendar"></i>
+                            <span th:text="${#temporals.format(task.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <span th:if="${task.priority == 'high'}" class="badge bg-danger badge-priority">Alta</span>
+                        <span th:if="${task.priority == 'medium'}" class="badge bg-warning badge-priority">Media</span>
+                        <span th:if="${task.priority == 'low'}" class="badge bg-info badge-priority">Baja</span>
+                        <span th:if="${task.completed}" class="badge bg-success ms-1">
+                            <i class="fas fa-check"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <h3 class="text-white mb-3">
+            <i class="fas fa-bolt"></i> Acciones Rápidas
+        </h3>
+        <div class="quick-actions">
+            <a href="/tasks" class="action-btn card">
+                <i class="fas fa-plus-circle" style="color: var(--primary-color);"></i>
+                Nueva Tarea
+            </a>
+            <a href="/categories" class="action-btn card">
+                <i class="fas fa-folder-plus" style="color: var(--secondary-color);"></i>
+                Gestionar Categorías
+            </a>
+            <a href="/motivation" class="action-btn card">
+                <i class="fas fa-lightbulb" style="color: var(--warning-color);"></i>
+                Motivación
+            </a>
+            <a href="/stats" class="action-btn card">
+                <i class="fas fa-chart-bar" style="color: var(--info-color);"></i>
+                Ver Estadísticas
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

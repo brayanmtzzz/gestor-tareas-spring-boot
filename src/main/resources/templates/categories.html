@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías - Gestor de Tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <style>
+        .container-main {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-card {
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .categories-card {
+            padding: 2rem;
+        }
+        
+        .category-item {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .category-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .category-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .category-details h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .category-count {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-tasks"></i> Gestor de Tareas
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/tasks">
+                            <i class="fas fa-list-check"></i> Tareas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/categories">
+                            <i class="fas fa-folder"></i> Categorías
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/motivation">
+                            <i class="fas fa-lightbulb"></i> Motivación
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/stats">
+                            <i class="fas fa-chart-bar"></i> Estadísticas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container container-main">
+        <!-- Add Category Form -->
+        <div class="card form-card">
+            <h3 class="mb-4">
+                <i class="fas fa-folder-plus"></i> Nueva Categoría
+            </h3>
+            <form th:action="@{/categories/save}" th:object="${newCategory}" method="post">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Nombre *</label>
+                        <input type="text" th:field="*{name}" class="form-control" 
+                               placeholder="Ej: UV" required/>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Icono (Emoji) *</label>
+                        <input type="text" th:field="*{icon}" class="form-control" 
+                               placeholder="📁" maxlength="2" required/>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label">Color *</label>
+                        <input type="color" th:field="*{color}" class="form-control" 
+                               value="#6366f1" required/>
+                    </div>
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-plus"></i> Crear
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Categories List -->
+        <div class="card categories-card">
+            <h3 class="mb-4">
+                <i class="fas fa-folder-open"></i> Mis Categorías
+                <span class="badge bg-primary ms-2" th:text="${#lists.size(categories)}">0</span>
+            </h3>
+            
+            <div th:if="${#lists.isEmpty(categories)}" class="empty-state">
+                <i class="fas fa-folder-open"></i>
+                <h4>No hay categorías</h4>
+                <p>Crea tu primera categoría para organizar tus tareas</p>
+            </div>
+
+            <div th:each="category : ${categories}" class="category-item">
+                <div class="category-info">
+                    <div class="category-icon" th:style="'background-color: ' + ${category.color}">
+                        <span th:text="${category.icon}"></span>
+                    </div>
+                    <div class="category-details">
+                        <h5 th:text="${category.name}"></h5>
+                        <div class="category-count">
+                            <i class="fas fa-tasks"></i>
+                            <span th:text="${category.tasks != null ? #lists.size(category.tasks) : 0}"></span>
+                            tareas
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <form th:action="@{/categories/delete/{id}(id=${category.id})}" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('¿Estás seguro? Las tareas de esta categoría quedarán sin categoría.')">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
