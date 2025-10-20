@@ -81,7 +81,8 @@
                             data-bs-toggle="modal" data-bs-target="#deleteModal"
                             th:attr="data-delete-url=@{/categories/delete/{id}(id=${category.id})}"
                             data-delete-text="¿Estás seguro? Las tareas de esta categoría quedarán sin categoría.">
-                        <i class="fas fa-trash"></i> Eliminar
+                        <i class="fas fa-trash"></i>
+                        <span class="d-none d-sm-inline ms-1">Eliminar</span>
                     </button>
                 </div>
             </div>

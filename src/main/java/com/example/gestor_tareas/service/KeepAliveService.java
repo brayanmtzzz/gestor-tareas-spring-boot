@@ -11,6 +11,7 @@ public class KeepAliveService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${SELF_URL}")
+    // @Value("${SELF_URL:http://localhost:8080}")
     private String selfUrl;
 
     @Scheduled(fixedRateString = "700000") 
