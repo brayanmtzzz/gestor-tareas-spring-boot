@@ -31,8 +31,15 @@
                     </div>
                     <div class="col-md-3 mb-3">
                         <label class="form-label">Color *</label>
-                        <input type="color" th:field="*{color}" class="form-control"
-                               value="#6366f1" required/>
+                        <div class="color-input-group">
+                            <label class="color-picker-trigger">
+                                <span class="color-preview" id="color-preview-swatch"></span>
+                                <input type="color" id="color-wheel-input" value="#000000">
+                            </label>
+                            <span class="color-prefix">#</span>
+                            <input type="text" id="hex-text-input" class="form-control color-hex-input" value="000000" required maxlength="6">
+                            <input type="hidden" th:field="*{color}" id="real-color-input" value="#000000">
+                        </div>
                     </div>
                     <div class="col-md-2 mb-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100">
@@ -87,17 +94,51 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var deleteModal = document.getElementById('deleteModal');
-            deleteModal.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                var deleteUrl = button.getAttribute('data-delete-url');
-                var deleteText = button.getAttribute('data-delete-text');
+            if (deleteModal) {
+                deleteModal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget;
+                    var deleteUrl = button.getAttribute('data-delete-url');
+                    var deleteText = button.getAttribute('data-delete-text');
+                    var form = deleteModal.querySelector('#deleteForm');
+                    var textElement = deleteModal.querySelector('#deleteModalText');
+                    form.setAttribute('action', deleteUrl);
+                    textElement.textContent = deleteText;
+                });
+            }
 
-                var form = deleteModal.querySelector('#deleteForm');
-                var textElement = deleteModal.querySelector('#deleteModalText');
+            const hexTextInput = document.getElementById('hex-text-input');
+            const colorWheel = document.getElementById('color-wheel-input');
+            const colorSwatch = document.getElementById('color-preview-swatch');
+            const realColorInput = document.getElementById('real-color-input');
 
-                form.setAttribute('action', deleteUrl);
-                textElement.textContent = deleteText;
-            });
+            if (hexTextInput && colorWheel && colorSwatch && realColorInput) {
+                function updateColor(sourceValue) {
+                    let color = sourceValue.startsWith('#') ? sourceValue : '#' + sourceValue;
+                    if (!/^#[0-9a-f]{6}$/i.test(color)) return;
+
+                    let hexValue = color.substring(1).toUpperCase();
+                    
+                    colorSwatch.style.backgroundColor = color;
+                    realColorInput.value = color;
+
+                    if (document.activeElement !== hexTextInput || hexTextInput.value.toUpperCase() !== hexValue) {
+                       hexTextInput.value = hexValue;
+                    }
+                    if (colorWheel.value !== color) {
+                        colorWheel.value = color;
+                    }
+                }
+                
+                updateColor(realColorInput.value || '#000000');
+
+                colorWheel.addEventListener('input', function() {
+                    updateColor(this.value);
+                });
+
+                hexTextInput.addEventListener('input', function() {
+                    updateColor(this.value);
+                });
+            }
         });
     </script>
 </body>
