@@ -51,7 +51,6 @@ public class GestorTareasApplication {
 				compras.setColor("#8b5cf6");
 				categoryRepository.save(compras);
 
-				System.out.println("✅ Categorías iniciales creadas");
 			}
 		};
 	}

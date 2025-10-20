@@ -7,13 +7,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class KeepAliveService {
-    
+
     private final RestTemplate restTemplate = new RestTemplate();
-    
-    @Value("${SELF_URL:http://localhost:8080}")
+
+    @Value("${SELF_URL}")
     private String selfUrl;
-    
-    @Scheduled(fixedRate = 700000)
+
+    @Scheduled(fixedRateString = "700000") 
     public void keepAlive() {
         try {
             restTemplate.getForObject(selfUrl, String.class);
